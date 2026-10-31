@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ABC de la conducta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF3F6;--surface:#FFFFFF;--ink:#16303D;--muted:#52697A;--line:#CBD8E0;
+  --a:#2B78AA;--b:#B87F00;--c:#2F8F5E;--abg:#E3F0F8;--bbg:#FBF0D3;--cbg:#DFF2E7;--focus:#16303D;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F1B23;--surface:#172732;--ink:#E8F0F4;--muted:#9DB3C1;--line:#2B4150;
+  --a:#6DB6E3;--b:#F2C14E;--c:#6FCF9B;--abg:#1A3445;--bbg:#3A3015;--cbg:#173A2A;--focus:#E8F0F4;}}
+:root[data-theme="dark"]{
+  --bg:#0F1B23;--surface:#172732;--ink:#E8F0F4;--muted:#9DB3C1;--line:#2B4150;
+  --a:#6DB6E3;--b:#F2C14E;--c:#6FCF9B;--abg:#1A3445;--bbg:#3A3015;--cbg:#173A2A;--focus:#E8F0F4;}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font:400 17px/1.5 "Atkinson Hyperlegible",system-ui,sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:20px 16px 48px}
+h1,h2,h3{font-family:"Bricolage Grotesque","Atkinson Hyperlegible",system-ui,sans-serif;line-height:1.1;margin:0}
+h1{font-size:clamp(30px,6vw,48px);font-weight:800}
+.lead{color:var(--muted);max-width:60ch;margin:10px 0 22px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.modes{display:inline-flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden;margin-bottom:20px}
+.modes button{border:0;background:transparent;padding:8px 20px;font-weight:700}
+.modes button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.fn{flex:1 1 200px;text-align:left;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;gap:10px;align-items:center}
+.fn .em{font-size:30px}
+.fn b{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:18px}
+.fn small{color:var(--muted);line-height:1.2;display:block}
+.fn[aria-pressed="true"]{border-color:var(--ink);box-shadow:4px 4px 0 var(--ink)}
+.chips{display:flex;gap:8px;align-items:center;margin:6px 0 18px;flex-wrap:wrap}
+.chip{border:2px solid var(--line);background:transparent;border-radius:999px;padding:5px 14px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chain{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:stretch}
+.step{border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:8px;opacity:.15;transform:translateY(10px);transition:opacity .45s,transform .45s}
+.step.show{opacity:1;transform:none}
+.step.A{background:var(--abg);--k:var(--a)}.step.B{background:var(--bbg);--k:var(--b)}.step.C{background:var(--cbg);--k:var(--c)}
+.step .top{display:flex;align-items:center;gap:10px}
+.letter{width:44px;height:44px;border-radius:12px;background:var(--k);color:var(--bg);display:grid;place-items:center;font:800 26px "Bricolage Grotesque",sans-serif}
+.step h3{font-size:20px;color:var(--ink)}
+.step .sub{color:var(--muted);font-size:14px;line-height:1.2}
+.pic{font-size:64px;line-height:1;text-align:center;padding:8px 0}
+.step p{margin:0}
+.arrow{align-self:center;font-size:30px;color:var(--muted);opacity:.2;transition:opacity .4s}
+.arrow.show{opacity:1}
+.panel{margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.box{background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:16px}
+.box h3{font-size:19px;margin-bottom:6px}
+.box p{margin:0}
+.replay{margin-top:14px;border:2px solid var(--ink);background:transparent;border-radius:999px;padding:7px 18px;font-weight:700}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:18px}
+.opt{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:12px;font-weight:700;display:flex;gap:8px;align-items:center}
+.opt.ok{border-color:var(--c);background:var(--cbg)}
+.opt.no{border-color:#C0392B}
+.fb{margin-top:16px}
+.score{color:var(--muted);margin:0 0 12px}
+.hidden{display:none}.intro{margin-bottom:22px}.intro ul{margin:8px 0 0;padding-left:20px}.gl dt{font-weight:700;margin-top:10px}.gl dd{margin:2px 0 0}summary{cursor:pointer}
+@media (max-width:760px){
+  .chain{grid-template-columns:1fr}
+  .arrow{transform:rotate(90deg);justify-self:center}
+  .panel{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){.step,.arrow{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>El ABC de la conducta</h1>
+  <p class="lead">Toda conducta ocurre entre lo que pasa antes y lo que pasa después. Elige una función y mira cómo se arma la cadena: Antecedente, Conducta, Consecuencia.</p>
+  <div class="box intro"><h2 style="font-size:22px">¿Por qué aprenderlo?</h2>
+  <ul>
+  <li>Dos conductas que se ven iguales pueden tener funciones distintas, y una misma función puede verse de formas muy distintas. Mirar solo cómo luce la conducta lleva a respuestas equivocadas.</li>
+  <li>Lo que hacemos justo después de una conducta, muchas veces sin darnos cuenta, puede hacer que se repita. Ceder ante un llanto para que pare le enseña al niño que llorar funciona.</li>
+  <li>Entender la función permite prevenir y enseñar una conducta alternativa, en lugar de solo regañar o ignorar.</li>
+  <li>Describe lo que se ve y se oye, sin culpar al niño ni a la familia.</li></ul>
+  <details style="margin-top:12px"><summary><b>Conceptos clave con precisión</b></summary><dl class="gl">
+  <dt>Antecedente</dt><dd>Evento previo a la conducta. Puede ser un estímulo discriminativo (señala que la conducta será reforzada) o una operación motivadora (cambia el valor del reforzador y la probabilidad de la conducta; por ejemplo, llevar rato sin atención o una demanda aversiva).</dd>
+  <dt>Conducta</dt><dd>Lo que la persona hace, observable y medible. Se escribe con una definición operacional, sin interpretaciones como “frustrado” o “caprichoso”.</dd>
+  <dt>Consecuencia</dt><dd>Evento que sigue a la conducta y afecta que vuelva a ocurrir. En el reforzamiento positivo se agrega algo (atención, un objeto) y la conducta aumenta. En el reforzamiento negativo se retira algo aversivo (una tarea, un ruido) y la conducta también aumenta. “Negativo” no significa “malo”.</dd>
+  <dt>Función</dt><dd>La razón por la que la conducta se mantiene, no su forma. Se hipotetiza a partir de la consecuencia que la mantiene y se confirma con una evaluación funcional.</dd></dl></details>
+  <p style="margin-top:12px;color:var(--muted);font-size:15px">Herramienta educativa. Los casos siguen las convenciones del análisis conductual aplicado, pero identificar la función de una conducta que preocupa requiere una evaluación hecha por un analista de conducta calificado (por ejemplo, un BCBA).</p></div>
+
+  <div class="modes" role="group" aria-label="Modo">
+    <button id="m1" aria-pressed="true">Explorar</button>
+    <button id="m2" aria-pressed="false">Practicar analizando</button>
+  </div>
+
+  <section id="explore">
+    <div class="row" id="fns"></div>
+    <div class="chips" id="cases"></div>
+    <div class="chain" id="chain" aria-live="polite"></div>
+    <button class="replay" id="replay">Ver de nuevo la secuencia</button>
+    <div class="panel">
+      <div class="box"><h3>Cómo reconocer esta función</h3><p id="pista"></p></div>
+      <div class="box"><h3>Qué hacer</h3><p id="hacer"></p></div>
+      <div class="box" style="grid-column:1/-1"><h3>Análisis de este caso</h3><p id="nota"></p></div>
+    </div>
+  </section>
+
+  <section id="practice" class="hidden">
+    <p class="score" id="score"></p>
+    <div class="chain" id="qchain"></div>
+    <h2 id="qt" style="font-size:22px;margin-top:20px"></h2>
+    <div class="opts" id="opts"></div>
+    <div class="box fb hidden" id="fb"></div>
+    <button class="replay hidden" id="next">Siguiente caso</button>
+  </section>
+</div>
+
+<script>
+const FN=[
+{id:"aten",e:"👀",n:"Atención",s:"Conseguir que alguien me mire o me hable",
+ pista:"Aparece cuando hay alguien cerca que podría atender, y suele cesar cuando la persona ya recibió atención (regaño, risas, miradas, charla). Si nadie está presente, casi no ocurre.",
+ hacer:"Dar atención de forma planificada y frecuente cuando la persona se comporta bien o pide ayuda con palabras, gestos o una tarjeta. Evitar reaccionar con grandes muestras de atención ante la conducta problema, sin dejar de garantizar su seguridad.",
+ c:[
+ {a:["📞","Mamá habla por teléfono y el niño juega solo."],b:["😠","Grita y lanza un juguete al suelo."],c:["🗣️","Mamá cuelga, lo mira y le llama la atención."]},
+ {a:["🏫","El profesor atiende a otro grupo de la clase."],b:["🤪","Hace ruidos con la boca en voz alta."],c:["😂","Los compañeros se ríen y el profesor se acerca."]}]},
+{id:"esc",e:"🚪",n:"Escape o evitación",s:"Librarme de algo que no quiero hacer",
+ pista:"Aparece justo después de una demanda, tarea o situación desagradable. La conducta funciona si logra que la tarea se retire, se acorte o se posponga.",
+ hacer:"Enseñar una forma de pedir un descanso o ayuda. Dividir la tarea en pasos pequeños, apoyar al principio y mantener la demanda cuando aparece la conducta, para que no sea la salida.",
+ c:[
+ {a:["📝","La maestra entrega una hoja de matemáticas difícil."],b:["😭","Rompe la hoja y llora."],c:["🚶","Lo envían al pasillo y la tarea queda sin hacer."]},
+ {a:["🛁","Mamá dice: “Es hora de bañarse”."],b:["🧎","Se tira al suelo y patalea."],c:["⏰","Mamá lo deja y el baño se pospone."]}]},
+{id:"tang",e:"🧸",n:"Acceso a algo tangible",s:"Conseguir un objeto o una actividad",
+ pista:"Aparece cuando la persona ve o quiere algo concreto (juguete, comida, tablet) y no lo tiene. Termina en cuanto lo obtiene.",
+ hacer:"Enseñar a pedir el objeto con una frase, un gesto o una tarjeta, y entregarlo rápido al principio. Más adelante enseñar a esperar con apoyos visuales y no entregar el objeto después de la conducta problema.",
+ c:[
+ {a:["🧸","En el supermercado ve un juguete que no tiene."],b:["😫","Llora fuerte y se agarra al carro."],c:["🎁","Se lo compran para que se calme."]},
+ {a:["📱","Quiere la tablet y el adulto dice que no."],b:["🗯️","Insiste, grita y golpea la mesa."],c:["📲","Se la dan “solo cinco minutos”."]}]},
+{id:"sens",e:"🌀",n:"Sensorial o automática",s:"Sentirme bien por la sensación misma",
+ pista:"Ocurre igual con gente o sin ella, en distintas tareas y lugares. La consecuencia es una sensación propia (movimiento, sonido, tacto) y no algo que den los demás.",
+ hacer:"Valorar con un profesional. Ofrecer alternativas que den una sensación parecida (objetos para manipular, movimiento programado), enriquecer el entorno y vigilar que la conducta no cause daño.",
+ c:[
+ {a:["🛏️","Está solo en su cuarto, sin nada que hacer."],b:["🙌","Aletea las manos y se balancea."],c:["✨","Siente la estimulación; nadie interviene."]},
+ {a:["📖","Hay un rato libre en clase y nadie le habla."],b:["👆","Chasquea los dedos sin parar."],c:["🎧","Escucha y siente el sonido; no cambia nada más."]}]}
+];
+const RF=["Reforzamiento positivo social: la conducta se mantiene porque produce atención (miradas, palabras, risas), aunque sea un regaño.","Reforzamiento negativo: la conducta se mantiene porque elimina o retrasa algo aversivo (una demanda, un ruido, una situación).","Reforzamiento positivo tangible: la conducta se mantiene porque produce un objeto, alimento o actividad.","Reforzamiento automático: la consecuencia es sensorial y la produce la propia conducta, sin mediación de otras personas."];
+FN.forEach((f,i)=>f.rf=RF[i]);
+FN[0].c.push(
+{a:["🍳","Mamá cocina de espaldas; Lucas (4 años) lleva 5 minutos jugando solo sin recibir atención."],b:["✋","Golpea con la palma abierta la pierna de su mamá."],c:["🗣️","Ella se voltea, lo mira y dice: “¡No pegues!”."],d:"Golpear con la palma abierta la pierna de otra persona, con contacto audible.",x:["Se pone agresivo para molestar a su mamá.","Está celoso y quiere llamar la atención."],n:"Operación motivadora: privación de atención (5 minutos sin interacción). El regaño es atención social y puede reforzar la conducta aunque suene negativo. Si a veces se atiende y a veces no (reforzamiento intermitente), la conducta se vuelve más resistente."},
+{a:["🏫","La profesora corrige a otro estudiante mientras el grupo observa."],b:["📢","Dice un chiste en voz alta sin levantar la mano."],c:["😂","Varios compañeros se ríen y lo miran."],d:"Emitir una frase en voz alta sin autorización, en una clase donde se pide levantar la mano.",x:["Es el payaso del salón.","Tiene baja autoestima y busca aprobación."],n:"Hay público presente, que funciona como estímulo discriminativo para atención de pares. La consecuencia es la atención de los compañeros, no de la profesora: la función se define por quién entrega el reforzador."});
+FN[1].c.push(
+{a:["🃏","La terapeuta presenta una tarjeta de lectura (demanda difícil) y dice: “Léela”."],b:["🖐️","Sofía empuja la tarjeta con la mano hasta que cae de la mesa."],c:["📦","La terapeuta guarda el material y dice: “Descansa un rato”."],d:"Empujar con la mano un objeto de la mesa hasta que cae al suelo.",x:["Es terca y no quiere trabajar.","Se frustra con las tareas."],n:"Operación motivadora: demanda aversiva. Retirar la demanda tras la conducta es reforzamiento negativo, así que la conducta aumenta aunque nadie lo pretenda. Intervención: enseñar a pedir un descanso y reforzar esa respuesta."},
+{a:["🎉","Entra a una fiesta con música a volumen muy alto."],b:["🙉","Se tapa los oídos con ambas manos y corre hacia la puerta."],c:["🚪","Su mamá lo saca al pasillo, donde ya no se oye la música."],d:"Cubrir ambos oídos con las manos y desplazarse hacia la salida.",x:["Le dan miedo las fiestas.","Es muy sensible."],n:"Se retira un estímulo auditivo aversivo: reforzamiento negativo. No es automática, porque la consecuencia es que el ruido desaparece al salir, no una sensación producida por la conducta misma. Intervención: enseñar a pedir salir o usar protección auditiva."});
+FN[2].c.push(
+{a:["🍪","Hora de la cena. Ve galletas en la mesa y su papá dice: “Después de comer”."],b:["😭","Se tira al suelo y llora a gritos más de un minuto."],c:["🍪","Su papá le entrega una galleta."],d:"Estar tirado en el suelo y emitir llanto de volumen alto durante al menos 10 segundos.",x:["Hace berrinche porque es caprichoso.","Está frustrado."],n:"Operación motivadora: deseo de un alimento preferido que está a la vista. Entregarlo tras la conducta es reforzamiento positivo tangible. Si a veces se cede y a veces no, la conducta se vuelve más persistente. Intervención: enseñar a pedir y a esperar."},
+{a:["🚗","Otro niño sostiene un carro que él quiere."],b:["🤲","Le arrebata el carro con ambas manos y se aleja."],c:["🏁","Se queda con el carro y juega."],d:"Tomar con las manos un objeto que otra persona sostiene y alejarse con él.",x:["Es egoísta.","Es agresivo con otros niños."],n:"La consecuencia es el acceso al objeto: reforzamiento positivo tangible. La forma (quitar) se parece a una conducta social, pero la función es obtener el objeto. Intervención: enseñar a pedir turno y reforzar compartir."});
+FN[3].c.push(
+{a:["🛋️","Está solo en la sala, sin demandas y con la tele apagada."],b:["🧣","Frota el borde de una tela contra su mejilla de forma repetida."],c:["✨","Siente la textura; nada cambia a su alrededor."],d:"Pasar el borde de una tela por la mejilla con movimientos repetidos.",x:["Se calma porque está ansiosa.","Tiene un apego raro a la tela."],n:"Persiste sin personas y sin demandas, un indicio de función automática. En una evaluación funcional se vería si continúa en la condición de estar solo. Intervención: enriquecer el ambiente y ofrecer alternativas con sensación similar; si causa daño, consultar a un profesional."},
+{a:["🧩","No tiene una actividad dirigida; hay adultos cerca o no."],b:["👏","Choca las palmas entre sí más de 3 veces en 5 segundos."],c:["🎶","Escucha el sonido del aplauso; los adultos no cambian lo que hacen."],d:"Chocar las palmas de las manos entre sí más de 3 veces en 5 segundos.",x:["Está feliz.","Quiere hacerse el gracioso."],n:"Ocurre con o sin otras personas y la consecuencia no depende de ellas: reforzamiento automático. Registrar en qué contextos aparece ayuda a distinguirla de atención o escape."});
+const $=s=>document.querySelector(s);
+const ST=[["A","Antecedente","Lo que pasa justo antes"],["B","Conducta","Lo que la persona hace"],["C","Consecuencia","Lo que pasa justo después"]];
+let cur=0,cs=0,timers=[];
+
+function chainHTML(c,hidden){
+  const k=[c.a,c.b,c.c];
+  return k.map((x,i)=>`<div class="step ${ST[i][0]}${hidden?'':' show'}"><div class="top"><div class="letter">${ST[i][0]}</div><div><h3>${ST[i][1]}</h3><div class="sub">${ST[i][2]}</div></div></div><div class="pic" aria-hidden="true">${x[0]}</div><p>${x[1]}</p></div>`+(i<2?`<div class="arrow${hidden?'':' show'}" aria-hidden="true">➜</div>`:'')).join('');
+}
+function play(){
+  timers.forEach(clearTimeout);timers=[];
+  const els=[...$('#chain').children];
+  els.forEach(e=>e.classList.remove('show'));
+  els.forEach((e,i)=>timers.push(setTimeout(()=>e.classList.add('show'),250+i*550)));
+}
+function render(){
+  const f=FN[cur];
+  document.querySelectorAll('.fn').forEach((b,i)=>b.setAttribute('aria-pressed',i===cur));
+  $('#cases').innerHTML='<span>Ejemplo:</span>'+f.c.map((_,i)=>`<button class="chip" data-i="${i}" aria-pressed="${i===cs}">${i+1}</button>`).join('');
+  $('#chain').innerHTML=chainHTML(f.c[cs],true);
+  $('#pista').textContent=f.pista;$('#hacer').textContent=f.hacer;$('#nota').textContent=f.rf+' '+(f.c[cs].n||'');
+  play();
+}
+$('#fns').innerHTML=FN.map((f,i)=>`<button class="fn" data-i="${i}" aria-pressed="false"><span class="em" aria-hidden="true">${f.e}</span><span><b>${f.n}</b><small>${f.s}</small></span></button>`).join('');
+$('#fns').onclick=e=>{const b=e.target.closest('.fn');if(!b)return;cur=+b.dataset.i;cs=0;render()};
+$('#cases').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;cs=+b.dataset.i;render()};
+$('#replay').onclick=play;
+
+/* Practicar */
+let pool=[],qi=0,ok=0,tot=0,cq=null,done=false;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function newPool(){pool=shuffle(FN.flatMap((f,fi)=>f.c.map(c=>({c,fi}))))}
+function ask(){
+  if(!pool.length)newPool();
+  cq=pool.pop();done=false;
+  $('#qchain').innerHTML=chainHTML(cq.c,false);
+  $('#opts').innerHTML=FN.map((f,i)=>`<button class="opt" data-i="${i}"><span aria-hidden="true">${f.e}</span>${f.n}</button>`).join('');
+  $('#fb').classList.add('hidden');$('#next').classList.add('hidden');
+  $('#score').textContent=`Aciertos: ${ok} de ${tot}`;
+}
+$('#opts').onclick=e=>{
+  const b=e.target.closest('.opt');if(!b||done)return;done=true;tot++;
+  const i=+b.dataset.i,right=i===cq.fi;
+  if(right)ok++;
+  b.classList.add(right?'ok':'no');
+  if(!right)[...$('#opts').children][cq.fi].classList.add('ok');
+  const f=FN[cq.fi];
+  $('#fb').innerHTML=`<h3>${right?'¡Correcto!':'Casi'}: es ${f.n.toLowerCase()}</h3><p>${f.pista}</p>`;
+  $('#fb').classList.remove('hidden');$('#next').classList.remove('hidden');
+  $('#score').textContent=`Aciertos: ${ok} de ${tot}`;
+};
+$('#next').onclick=ask;
+
+function mode(m){
+  $('#m1').setAttribute('aria-pressed',m===1);$('#m2').setAttribute('aria-pressed',m===2);
+  $('#explore').classList.toggle('hidden',m!==1);$('#practice').classList.toggle('hidden',m!==2);
+  if(m===2&&!cq)ask();
+}
+var step=0,qopts=[],after=null;
+function showQ(){
+  $('#score').textContent=`Aciertos en la función: ${ok} de ${tot}`;
+  if(step===0){$('#qt').textContent='Paso 1: ¿cuál es la definición operacional de la conducta B?';qopts=shuffle([{l:cq.c.d,ok:true},{l:cq.c.x[0]},{l:cq.c.x[1]}]);}
+  else{$('#qt').textContent='Paso 2: ¿qué función mantiene la conducta?';qopts=FN.map((f,i)=>({l:`<span aria-hidden="true">${f.e}</span>${f.n}`,ok:i===cq.fi}));}
+  $('#opts').innerHTML=qopts.map((o,i)=>`<button class="opt" data-i="${i}">${o.l}</button>`).join('');
+  $('#fb').classList.add('hidden');$('#next').classList.add('hidden');done=false;
+}
+function ask(){if(!pool.length)newPool();cq=pool.pop();$('#qchain').innerHTML=chainHTML(cq.c,false);step=cq.c.d?0:1;showQ();}
+$('#opts').onclick=e=>{
+  const b=e.target.closest('.opt');if(!b||done)return;done=true;
+  const o=qopts[+b.dataset.i],kids=[...$('#opts').children];
+  b.classList.add(o.ok?'ok':'no');kids[qopts.findIndex(q=>q.ok)].classList.add('ok');
+  const f=FN[cq.fi];let h;
+  if(step===0){
+    h=`<h3>${o.ok?'Correcto':'Casi'}</h3><p>Una definición operacional describe movimientos o sonidos que dos observadores podrían contar. Palabras como “frustrado”, “terco” o “celoso” son interpretaciones, no conducta observable.</p>`;
+    after=()=>{step=1;showQ()};$('#next').textContent='Continuar al paso 2';
+  }else{
+    tot++;if(o.ok)ok++;
+    h=`<h3>${o.ok?'¡Correcto!':'Casi'}: ${f.n.toLowerCase()}</h3><p>${f.rf}</p><p style="margin-top:8px">${cq.c.n||f.pista}</p>`;
+    after=ask;$('#next').textContent='Siguiente caso';
+    $('#score').textContent=`Aciertos en la función: ${ok} de ${tot}`;
+  }
+  $('#fb').innerHTML=h;$('#fb').classList.remove('hidden');$('#next').classList.remove('hidden');
+};
+$('#next').onclick=()=>after&&after();
+$('#m1').onclick=()=>mode(1);$('#m2').onclick=()=>mode(2);
+render();
+</script>
+</body>
+</html>
