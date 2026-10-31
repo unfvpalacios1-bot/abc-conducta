@@ -106,12 +106,22 @@ button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
   </section>
 
   <section id="practice" class="hidden">
+    <div class="box" id="reg" style="margin-bottom:16px"><h3>Antes de practicar</h3>
+      <p style="margin-bottom:10px">Escribe tus datos para que quien te compartió esta herramienta pueda ver cómo te fue. Para el niño o la niña usa solo el primer nombre o sus iniciales.</p>
+      <label>Nombre del padre, madre o cuidador<br><input id="rp" type="text" autocomplete="off" style="width:100%;max-width:420px;font:inherit;padding:8px;margin:4px 0 10px;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)"></label><br>
+      <label>Nombre o iniciales del niño o niña<br><input id="rh" type="text" autocomplete="off" style="width:100%;max-width:420px;font:inherit;padding:8px;margin:4px 0 10px;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)"></label><br>
+      <label style="display:flex;gap:8px;align-items:flex-start"><input id="rc" type="checkbox" style="margin-top:6px"><span>Acepto que, solo cuando yo pulse “Enviar mis resultados”, se envíen estos nombres y mis respuestas al correo de quien me compartió esta herramienta.</span></label>
+      <button class="replay" id="rgo">Comenzar</button><p id="rerr" style="color:#C0392B;margin-top:8px"></p></div>
+    <div id="pbody" class="hidden">
     <p class="score" id="score"></p>
     <div class="chain" id="qchain"></div>
     <h2 id="qt" style="font-size:22px;margin-top:20px"></h2>
     <div class="opts" id="opts"></div>
     <div class="box fb hidden" id="fb"></div>
     <button class="replay hidden" id="next">Siguiente caso</button>
+    <div class="box" style="margin-top:20px"><h3>Enviar mis resultados</h3><p>Envía un resumen de los casos que respondiste.</p>
+      <button class="replay" id="send">Enviar mis resultados</button><p id="sendst" role="status" style="margin-top:8px"></p></div>
+    </div>
   </section>
 </div>
 
@@ -211,7 +221,7 @@ $('#next').onclick=ask;
 function mode(m){
   $('#m1').setAttribute('aria-pressed',m===1);$('#m2').setAttribute('aria-pressed',m===2);
   $('#explore').classList.toggle('hidden',m!==1);$('#practice').classList.toggle('hidden',m!==2);
-  if(m===2&&!cq)ask();
+  if(m===2&&REG&&!cq)ask();
 }
 var step=0,qopts=[],after=null;
 function showQ(){
@@ -229,9 +239,9 @@ $('#opts').onclick=e=>{
   const f=FN[cq.fi];let h;
   if(step===0){
     h=`<h3>${o.ok?'Correcto':'Casi'}</h3><p>Una definición operacional describe movimientos o sonidos que dos observadores podrían contar. Palabras como “frustrado”, “terco” o “celoso” son interpretaciones, no conducta observable.</p>`;
-    after=()=>{step=1;showQ()};$('#next').textContent='Continuar al paso 2';
+    defOK=o.ok;after=()=>{step=1;showQ()};$('#next').textContent='Continuar al paso 2';
   }else{
-    tot++;if(o.ok)ok++;
+    tot++;if(o.ok)ok++;LOG.push({caso:cq.c.a[1]+' / '+cq.c.b[1]+' / '+cq.c.c[1],def:cq.c.d?(defOK?'acertó':'falló'):'no aplica',resp:FN[+b.dataset.i].n,corr:f.n,ok:o.ok});
     h=`<h3>${o.ok?'¡Correcto!':'Casi'}: ${f.n.toLowerCase()}</h3><p>${f.rf}</p><p style="margin-top:8px">${cq.c.n||f.pista}</p>`;
     after=ask;$('#next').textContent='Siguiente caso';
     $('#score').textContent=`Aciertos en la función: ${ok} de ${tot}`;
@@ -239,6 +249,24 @@ $('#opts').onclick=e=>{
   $('#fb').innerHTML=h;$('#fb').classList.remove('hidden');$('#next').classList.remove('hidden');
 };
 $('#next').onclick=()=>after&&after();
+var ACCESS_KEY="963d35de-654b-4326-9428-ae634686d3a9",REG=null,LOG=[],defOK=false;
+$('#rgo').onclick=()=>{
+  const p=$('#rp').value.trim(),h=$('#rh').value.trim();
+  if(!p||!h){$('#rerr').textContent='Completa los dos nombres.';return}
+  if(!$('#rc').checked){$('#rerr').textContent='Marca la casilla para continuar.';return}
+  REG={padre:p,hijo:h};$('#reg').classList.add('hidden');$('#pbody').classList.remove('hidden');ask();
+};
+$('#send').onclick=async()=>{
+  const st=$('#sendst');
+  if(ACCESS_KEY.startsWith('PEGA')){st.textContent='Falta configurar la clave de envío.';return}
+  if(!LOG.length){st.textContent='Responde al menos un caso antes de enviar.';return}
+  const lines=LOG.map((r,i)=>`${i+1}. ${r.caso}\n   Definición operacional: ${r.def}\n   Respondió: ${r.resp} | Correcta: ${r.corr} | ${r.ok?'Acierto':'Error'}`).join('\n\n');
+  st.textContent='Enviando…';
+  try{
+    const r=await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({access_key:ACCESS_KEY,subject:'ABC de la conducta: '+REG.hijo,from_name:'ABC de la conducta',name:REG.padre,hijo:REG.hijo,aciertos:`${ok} de ${tot}`,message:lines})});
+    const j=await r.json();st.textContent=j.success?'Enviado. ¡Gracias!':'No se pudo enviar. Intenta de nuevo.';
+  }catch(e){st.textContent='No se pudo enviar. Revisa tu conexión e intenta de nuevo.'}
+};
 $('#m1').onclick=()=>mode(1);$('#m2').onclick=()=>mode(2);
 render();
 </script>
